@@ -1,2 +1,3 @@
-# programming-languages-cs5510
-My Racket files (plai) from Matthew Flatt's CS 5510
+# Programming Languages (CS 5510)
+
+My Racket files from Matthew Flatt's CS 5510. They use plai, not plai-typed as he does in his course.
