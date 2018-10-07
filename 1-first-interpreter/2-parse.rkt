@@ -20,6 +20,8 @@
   [id (name symbol?)]
   )
 
+
+; this is to use id? identifier
 (define *reserved-symbols* '(+ -))
 
 ;; valid-identifier? : any -> boolean
@@ -41,14 +43,19 @@
 (test (valid-identifier? 'x) true)
 
 
+;; An arith-S-exp is either
+;; - number
+;; - (list '+ arith-S-expr arith-S-expr)
+;; - (list '* arith-S-expr arith-S-expr)
+
 
 ; S expression => Arithmetic Expression
 (define (parse sexp) ; returns Arithmetic Expression
   (match sexp
     [(? valid-identifier?) id] ; is it an ID?
     [(? number?) (numC sexp)] ; is it a number?
-    [(list '+ lhs rhs) (plusC (parse lhs) (parse rhs))] ; is it a list with +, then some left and right hand side?
-    [(list '* lhs rhs) (multC (parse lhs) (parse rhs))] ; ditto but for *?
+    [(list '+ lhs rhs) (plusC (parse lhs) (parse rhs))] ; checks if: is it a list with +, then some left and right hand side
+    [(list '* lhs rhs) (multC (parse lhs) (parse rhs))] ; ditto but for *
     )
   )
 
@@ -68,14 +75,26 @@
              (numC 8)))
 
 
+; why have parse? We can use it with interp.
+; we can also use (parse(read)) and then put in the ArithC expressions.
 
-; (test (interp (numC 2))
-;       2)
-; (test (interp (plusC (numC 2) (numC 1)))
-;       3)
-; (test (interp (multC (numC 2) (numC 1)))
-;       2)
-; (test (interp (plusC (multC (numC 2) (numC 3))
-;                      (plusC (numC 5) (numC 8))))
-;       19)
+; ArithC -> number
+(define (interp a) ; : number
+	(type-case ArithC a
+		[numC (n) n]
+		[id (name) (error "Error!")]
+		[plusC (left right) (+ (interp left) (interp right))]
+		[multC (left right) (* (interp left) (interp right))]
+		)
+)
+
+(test (interp (numC 2))
+      2)
+(test (interp (plusC (numC 2) (numC 1)))
+      3)
+(test (interp (multC (numC 2) (numC 1)))
+      2)
+(test (interp (plusC (multC (numC 2) (numC 3))
+                     (plusC (numC 5) (numC 8))))
+      19)
 

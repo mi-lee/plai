@@ -7,10 +7,7 @@
   [plusC (l : ArithC) (r : ArithC)]
   [multC (l : ArithC) (r : ArithC)])
 
-;; An arith-S-exp is either
-;; - number
-;; - (list '+ arith-S-expr arith-S-expr)
-;; - (list '* arith-S-expr arith-S-expr)
+
 
 (define (parse [s : s-expression]) : ArithC
   (cond
