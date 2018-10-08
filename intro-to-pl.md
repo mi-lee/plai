@@ -6,9 +6,27 @@ draft: false
 
 Notes on learning PL as a complete beginner.
 
+<!-- MarkdownTOC -->
+
+- [Intro to PLAI](#intro-to-plai)
+- [First Interpreter](#first-interpreter)
+  - [Why do we use `'` and `{}`?](#why-do-we-use--and-)
+  - [What is  `read`, and why is it considered the crown jewel of Lisp/Racket?](#what-is-read-and-why-is-it-considered-the-crown-jewel-of-lispracket)
+    - [What is `read`?](#what-is-read)
+  - [What is desugaring?](#what-is-desugaring)
+  - [What about implementing functions?](#what-about-implementing-functions)
+    - [What is `id` for?](#what-is-id-for)
+    - [What about function applications?](#what-about-function-applications)
+  - [Now how can we interp function calls?](#now-how-can-we-interp-function-calls)
+  - [How does `subst` work?](#how-does-subst-work)
+- [Aside: Probabilistic programming](#aside-probabilistic-programming)
+
+<!-- /MarkdownTOC -->
 
 
-## Intro to PLAI
+
+
+# Intro to PLAI
 
 - Watch the videos by Matthew Flatt [here](https://pubweb.eng.utah.edu/~cs5510/schedule.html). They are excellent.
 - `plai-typed` is so much better than `plai`. However, I'm just going with `plai` because that's what I'm using in my current course. [Note: I am not a student of CS 5510]
@@ -58,9 +76,12 @@ And now we can use it as a template to create functions, such as below:
 
 
 
-## First Interpreter
+# First Interpreter
 
-We will interpret something like `{+ 2 1}` or `{+ 2 {* 4 3}}`
+*PLAI from Chap 1-6.*
+
+
+We will interpret something like `{+ 2 1}` or `{+ 2 {* 4 3}}`.
 
 - curly brackets because it's the user input we're implementing (NOT plai)
 - Since it takes both signs and number, we need to implement all 3 types (+, -, number)
@@ -93,9 +114,9 @@ Now let's move onto parsing.
 
 Now let's move onto parsing. Note that we are using (add (numC 2) (numC 3)) for plai language to represent the arithmetic language expression.
 
-But we want {+ 2 1} to work! ``'{+ 2 1} ` (a quote expresison in front): not evaluated, but is the shorthand for Racket's `read`.
+But we want {+ 2 1} to work! `'{+ 2 1} ` (a quote expresison in front): not evaluated, but is the shorthand for Racket's `read`.
 
-So we want the parser to turn from our desired syntax (i.e.`` '{+ 2 1`} to something like `(add (numC 2) (numC 1))`, and then our interpreter can take over from there.)
+So we want the parser to turn from our desired syntax (i.e. `'{+ 2 1`} to something like `(add (numC 2) (numC 1))`, and then our interpreter can take over from there.)
 
 So we want something like this to pass:
 
@@ -128,17 +149,19 @@ Now the following tests should work:
 ; (test (interp (parse '{+ 7 {- 3 4}})) 6)
 ```
 
-### Why do we use '`' and `{}`?
+## Why do we use `'` and `{}`?
 
-TODO
+If we put ' quote mark ==> it becomes a Racket expression, a VALUE, and is not evaluated.
+
+The curly braces are because we need representations from `{ + 2 1 }` => `(plusC (numC 2) (numC 1))`. The parse function takes quoted form, takes concrete syntax => our representation of the syntax.
 
 
 
-### What is  `read`, and why is it considered the crown jewel of Lisp/Racket?
+## What is  `read`, and why is it considered the crown jewel of Lisp/Racket?
 
 Using a quote, `(quote {+ 1 2})` or just `'{+ 1 2}'`, returns a constant called a datum, and is shorthand notation for `read`.
 
-#### What is `read`? 
+### What is `read`?
 
 Racket's reader is a recursive-descent parser that can be configured easily.
 
@@ -160,7 +183,7 @@ to
 
 
 
-### What is desugaring?
+## What is desugaring?
 
 We can "desugar" the `minus` by re-using the `plus`. For example, `desugar: (ArithS -> ArithcC)`, from a define-type WITH subtraction, to a define-type WITHOUT subtraction.
 
@@ -178,7 +201,7 @@ How would we implement a desugar, then?
 
 
 
-### What about implementing functions?
+## What about implementing functions?
 
 Let's say we want something like
 
@@ -187,15 +210,15 @@ Let's say we want something like
 	{+ x x}}
 ```
 
-Note that we can't do something like 
+Note that we can't do something like
 
 ```
 {+ {define {double x} {+ x x}} 1}
 ```
 
-and why not? because functions are not expressions. We need to deal with function definitions. 
+and why not? because functions are not expressions. We need to deal with function definitions.
 
-A function **call** is an expression (also known as **function application**). 
+A function **call** is an expression (also known as **function application**).
 
 A function has:
 
@@ -233,15 +256,15 @@ So now, expressions can be...
 In the example of `double` above...
 
 ```
-{define {double x}  
+{define {double x}
 	{+ x x}}
-	
+
 ; name: "double"
 ; arg: "x"
 ; body: "{+ x x}
 ```
 
-#### What is `id` for?
+### What is `id` for?
 
 Something like `{ + x 2}`, how would we deal with this? Since `x` is an identifier (that is NOT a symbol like `+`, which is considered reserved), we have to represent it like `(plusC (idC 'x) (numC 2))`.
 
@@ -268,16 +291,16 @@ And an example would be
 ; EXAMPLE
 (fundef 'double
         'n
-        (add (id 'n) (id 'n))) 
+        (add (id 'n) (id 'n)))
 ```
 
-to represent that the function `double`. It need to be wrapped with a quote to indicate that it is a symbol. 
+to represent that the function `double`. It need to be wrapped with a quote to indicate that it is a symbol.
 
 
 
-#### What about function applications?
+### What about function applications?
 
-Remember that they are expressions (but function definitions are not). So something like 
+Remember that they are expressions (but function definitions are not). So something like
 
 `{double 2}`
 
@@ -296,7 +319,7 @@ would need to represented as part of our `ArithmeticExpression` define-type, but
 
 
 
-### Now how can we interp function calls?
+## Now how can we interp function calls?
 
 Take `double` as an example.
 
@@ -304,12 +327,12 @@ Take `double` as an example.
 
 1. Look up `double` in our function definitions and find the body.
 2. Replace `double` with the substitution with `+` and the arguments.
-3. Keep recursively evaluating. 
+3. Keep recursively evaluating.
 
 So helpers needed are:
 
 - Function lookup
-- Substitutor 
+- Substitutor
 - and interpreter
 
 
@@ -338,15 +361,15 @@ How should `appC` work? it should be like
 (interp (appC 'double (numC 8))
 			(list double-def))
 			16)
-			
+
 ; appC: takes s-expression, returns...
-; 1) function def from lookup, 
+; 1) function def from lookup,
 ; 2) body, we want to start interpreting but substitute into it. so call (subst .... body)
 ```
 
 
 
-### How does `subst` work?
+## How does `subst` work?
 
 ```
 (define (subst [what: ExprC]
