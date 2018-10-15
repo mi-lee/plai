@@ -24,8 +24,6 @@ Notes on learning PL as a complete beginner.
 <!-- /MarkdownTOC -->
 
 
-
-
 # Intro to PLAI
 
 - Watch the videos by Matthew Flatt [here](https://pubweb.eng.utah.edu/~cs5510/schedule.html). They are excellent.
@@ -71,8 +69,6 @@ And now we can use it as a template to create functions, such as below:
     )
   )
 ```
-
-
 
 
 
