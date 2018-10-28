@@ -11,8 +11,7 @@ Notes on learning PL as a complete beginner.
 - [Intro to PLAI](#intro-to-plai)
 - [First Interpreter](#first-interpreter)
   - [Why do we use `'` and `{}`?](#why-do-we-use--and-)
-  - [What is  `read`, and why is it considered the crown jewel of Lisp/Racket?](#what-is-read-and-why-is-it-considered-the-crown-jewel-of-lispracket)
-    - [What is `read`?](#what-is-read)
+  - [What is `read`?](#what-is-read)
   - [What is desugaring?](#what-is-desugaring)
   - [What about implementing functions?](#what-about-implementing-functions)
     - [What is `id` for?](#what-is-id-for)
@@ -27,7 +26,6 @@ Notes on learning PL as a complete beginner.
 # Intro to PLAI
 
 - Watch the videos by Matthew Flatt [here](https://pubweb.eng.utah.edu/~cs5510/schedule.html). They are excellent.
-- `plai-typed` is so much better than `plai`. However, I'm just going with `plai` because that's what I'm using in my current course. [Note: I am not a student of CS 5510]
 
 If you have done HtDD before, `define-type` from the PLAI library is essentially the same way to define a data definition (and we can use it for HtDF).
 
@@ -153,11 +151,9 @@ The curly braces are because we need representations from `{ + 2 1 }` => `(plusC
 
 
 
-## What is  `read`, and why is it considered the crown jewel of Lisp/Racket?
+## What is `read`?
 
 Using a quote, `(quote {+ 1 2})` or just `'{+ 1 2}'`, returns a constant called a datum, and is shorthand notation for `read`.
-
-### What is `read`?
 
 Racket's reader is a recursive-descent parser that can be configured easily.
 
