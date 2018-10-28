@@ -1,4 +1,4 @@
-# Programming Languages (CS 5510)
+# plai
 
 My Racket files for [PLAI](http://cs.brown.edu/~sk/Publications/Books/ProgLangs/2007-04-26/).
 
