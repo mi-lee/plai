@@ -12,7 +12,7 @@ When is state essential? a GUI..
 
 
 
-**State is a side channel** -- an extra way for communicating in different parts of a program! 
+**State is a side channel** -- an extra way for communicating in different parts of a program!
 
 Pros: you can add new channels at will, but cons: channels of communication not apparent..
 
@@ -32,7 +32,7 @@ begin: needed to sequence the result -- returns the value of the expression of t
   [closV (arg : symbol)
          (body : ExprC)
          (env : Env)]
-  [boxV (b : (boxof Value))])	
+  [boxV (b : (boxof Value))])
 ```
 
 Don't rely on Racket boxes.
@@ -104,7 +104,7 @@ The result we get:
 
 ### The Store
 
-Store is similar to rep. as Environment, but we can use a number as a location 
+Store is similar to rep. as Environment, but we can use a number as a location
 
 
 
@@ -123,31 +123,4 @@ Store is similar to rep. as Environment, but we can use a number as a location
 define-syntax-rule: bind `with` to trigger  as syntatic sugar expansion (i.e. like a template)
 
 
-
-
-
-# Variables
-
-Motivation: ability to mutate variables (to work like boxes in that regard)
-
-
-
-Variables and boxes: 
-
-The point of having references is to update variables in place. 
-
-### Example:
-
-Variables and boxes -- boxes are like pointers in C (location with variable as identifier). Allowing mutations to be observabale -- can you 
-
-- boxes/pointers
-- every assignment can change the value
-
-Go: assignment is a copy
-
-
-
-tldr: boxes are not any more fundamental than variables.
-
-RVCFAE: every function application is by reference.
 

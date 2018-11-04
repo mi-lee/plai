@@ -1,18 +1,12 @@
----
-title: "Notes on Intro Programming Language Theory"
-date: 2018-09-30T11:21:34-07:00
-draft: false
----
-
-Notes on learning PL as a complete beginner.
+# First Interpreter
 
 <!-- MarkdownTOC -->
 
-- [Intro to PLAI](#intro-to-plai)
+- [Intro to plai](#intro-to-plai)
 - [First Interpreter](#first-interpreter)
-  - [Why do we use `'` and `{}`?](#why-do-we-use--and-)
-  - [What is `read`?](#what-is-read)
-  - [What is desugaring?](#what-is-desugaring)
+  - [Why use `'` and `{}`?](#why-use--and-)
+  - [`read`](#read)
+  - [Desugaring?](#desugaring)
   - [What about implementing functions?](#what-about-implementing-functions)
     - [What is `id` for?](#what-is-id-for)
     - [What about function applications?](#what-about-function-applications)
@@ -23,7 +17,8 @@ Notes on learning PL as a complete beginner.
 <!-- /MarkdownTOC -->
 
 
-# Intro to PLAI
+
+# Intro to plai
 
 - Watch the videos by Matthew Flatt [here](https://pubweb.eng.utah.edu/~cs5510/schedule.html). They are excellent.
 
@@ -143,7 +138,7 @@ Now the following tests should work:
 ; (test (interp (parse '{+ 7 {- 3 4}})) 6)
 ```
 
-## Why do we use `'` and `{}`?
+## Why use `'` and `{}`?
 
 If we put ' quote mark ==> it becomes a Racket expression, a VALUE, and is not evaluated.
 
@@ -151,7 +146,7 @@ The curly braces are because we need representations from `{ + 2 1 }` => `(plusC
 
 
 
-## What is `read`?
+## `read`
 
 Using a quote, `(quote {+ 1 2})` or just `'{+ 1 2}'`, returns a constant called a datum, and is shorthand notation for `read`.
 
@@ -175,7 +170,7 @@ to
 
 
 
-## What is desugaring?
+## Desugaring?
 
 We can "desugar" the `minus` by re-using the `plus`. For example, `desugar: (ArithS -> ArithcC)`, from a define-type WITH subtraction, to a define-type WITHOUT subtraction.
 
