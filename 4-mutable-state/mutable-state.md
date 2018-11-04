@@ -108,9 +108,16 @@ Store is similar to rep. as Environment, but we can use a number as a location
 
 
 
-#### Examples
+## Sweeter Syntax
 
+- use `with`
+
+```scheme
+(define-syntax-rule
+  (with [(v-id sto-id) call]
+    body)
+  (type-case Result call
+    [v*s (v-id sto-id) body]))
 ```
 
-```
-
+define-syntax-rule: bind `with` to trigger  as syntatic sugar expansion (i.e. like a template)

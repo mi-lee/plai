@@ -13,11 +13,11 @@
 (define-type ExprC
   [numC (n : number)]
   [idC (s : symbol)]
-  [plusC (l : ExprC) 
+  [plusC (l : ExprC)
          (r : ExprC)]
   [multC (l : ExprC)
          (r : ExprC)]
-  [letC (n : symbol) 
+  [letC (n : symbol)
         (rhs : ExprC)
         (body : ExprC)]
   [lamC (n : symbol)
@@ -41,7 +41,7 @@
 (define extend-env cons)
 
 (define-type Storage
-  [cell (location : Location) 
+  [cell (location : Location)
         (val : Value)])
 
 (define-type-alias Store (listof Storage))
@@ -73,7 +73,7 @@
              (parse (second bs))
              (parse (third (s-exp->list s)))))]
     [(s-exp-match? '{lambda {SYMBOL} ANY} s)
-     (lamC (s-exp->symbol (first (s-exp->list 
+     (lamC (s-exp->symbol (first (s-exp->list
                                   (second (s-exp->list s)))))
            (parse (third (s-exp->list s))))]
     [(s-exp-match? '{box ANY} s)
@@ -128,7 +128,7 @@
     body)
   (type-case Result call
     [v*s (v-id sto-id) body]))
-                                
+
 ;; interp ----------------------------------------
 (define (interp [a : ExprC] [env : Env] [sto : Store]) : Result
   (type-case ExprC a
@@ -165,13 +165,13 @@
     [boxC (a)
           (with [(v sto-v) (interp a env sto)]
             (let ([l (new-loc sto-v)])
-              (v*s (boxV l) 
-                   (override-store (cell l v) 
+              (v*s (boxV l)
+                   (override-store (cell l v)
                                    sto-v))))]
     [unboxC (a)
             (with [(v sto-v) (interp a env sto)]
               (type-case Value v
-                [boxV (l) (v*s (fetch l sto-v) 
+                [boxV (l) (v*s (fetch l sto-v)
                                sto-v)]
                 [else (error 'interp "not a box")]))]
     [setboxC (bx val)
@@ -189,11 +189,11 @@
 
 (module+ test
   (test (interp (parse '2) mt-env mt-store)
-        (v*s (numV 2) 
+        (v*s (numV 2)
              mt-store))
   (test/exn (interp (parse `x) mt-env mt-store)
             "free variable")
-  (test (interp (parse `x) 
+  (test (interp (parse `x)
                 (extend-env (bind 'x (numV 9)) mt-env)
                 mt-store)
         (v*s (numV 9)
@@ -325,7 +325,7 @@
                     (bind 'x (numV 9))
                     (extend-env (bind 'y (numV 8)) mt-env)))
         (numV 8)))
-  
+
 ;; store operations ----------------------------------------
 
 (define (new-loc [sto : Store]) : Location
@@ -350,7 +350,7 @@
   (test (max-address (override-store (cell 2 (numV 9))
                                      mt-store))
         2)
-  
+
   (test (fetch 2 (override-store (cell 2 (numV 9))
                                  mt-store))
         (numV 9))
