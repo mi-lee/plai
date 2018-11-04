@@ -26,7 +26,7 @@ begin: needed to sequence the result -- returns the value of the expression of t
 
 ## Boxes as boxes
 
-```scheme
+```racket
 (define-type Value
   [numV (n : number)]
   [closV (arg : symbol)
@@ -49,7 +49,7 @@ Consider a 2d matrix where set-box will update the value, and unbox will return 
 
 So interp is now:
 
-```
+```racket
 interp: (Expression Environment -> Value)
 NOW:
 
@@ -62,7 +62,7 @@ store is "memory"
 
 You can change memory over time, so memory needs to be produced by `interp`. So instead of returning Value, needs to return Value AND Store, so instead we'll call it `Result`:
 
-```scheme
+```racket
 (define-type Result
              [v*s (v: Value) (s: Store)])
 ```
@@ -73,7 +73,7 @@ You can change memory over time, so memory needs to be produced by `interp`. So 
 
 Now, instead of
 
-```
+```racket
 (num+ (interp l env) (interp r env))
 ```
 
@@ -85,7 +85,7 @@ it needs a store to interp r.
 
 The result we get:
 
-```scheme
+```racket
 (define (interp [a : ExprC] [env : Env] [sto : Store]) : Result
 .......
     [plusC (l r)
@@ -112,7 +112,7 @@ Store is similar to rep. as Environment, but we can use a number as a location
 
 - use `with`
 
-```scheme
+```racket
 (define-syntax-rule
   (with [(v-id sto-id) call]
     body)

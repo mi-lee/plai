@@ -43,7 +43,7 @@ If you have done HtDD before, `define-type` from the PLAI library is essentially
 
 For example,
 
-```lisp
+```racket
 (define-type Animal
   [snake (name: symbol)
          (weight: number)]
@@ -53,7 +53,7 @@ For example,
 
 And now we can use it as a template to create functions, such as below:
 
-```lisp
+```racket
 (define (heavy-animal? [a: Animal])
   (type-case Animal a
     [snake (name weight)
@@ -75,7 +75,7 @@ We will interpret something like `{+ 2 1}` or `{+ 2 {* 4 3}}`.
 - curly brackets because it's the user input we're implementing (NOT plai)
 - Since it takes both signs and number, we need to implement all 3 types (+, -, number)
 
-```
+```racket
 #lang plai
 
 (define-type AE
@@ -114,7 +114,7 @@ So we want something like this to pass:
 ```
 
 so that eventually parse can hand over the syntax to interp, which does the work in actually interpreting it.
-```racket
+```
 (test (interp (parse '{+ 3 4})) 7)
 ```
 
@@ -160,7 +160,7 @@ Using `read` is identical to:
 
 to
 
-```
+```racket
 (parse (read))
 
 // Waits for user input..
@@ -176,7 +176,7 @@ We can "desugar" the `minus` by re-using the `plus`. For example, `desugar: (Ari
 
 How would we implement a desugar, then?
 
-```
+```racket
 (define (desugar sExpression) ; -> Returns a C expression
   (type-case AE sExpression
     [numS ..]
@@ -192,14 +192,14 @@ How would we implement a desugar, then?
 
 Let's say we want something like
 
-```
+```racket
 {define {double x}
 	{+ x x}}
 ```
 
 Note that we can't do something like
 
-```
+```racket
 {+ {define {double x} {+ x x}} 1}
 ```
 
@@ -225,14 +225,14 @@ So now, expressions can be...
 
 
 
-```
+```racket
 (define-type Expression
 	[numC ...]
 	[idC ...]
 	[app (s symbol?) (arg Expression?)]
 )
 
-```
+```racket
 ```
 ; and define our function definition here.
 (define-type FunctionDefinition
@@ -242,7 +242,7 @@ So now, expressions can be...
 
 In the example of `double` above...
 
-```
+```racket
 {define {double x}
 	{+ x x}}
 
@@ -261,7 +261,7 @@ Why is it quote-x? It's so it can represent the variable `x`.
 
 So funded looks like this
 
-```
+```racket
 (define-type FunDef
   [fundef (fun-name symbol?) ; for lookup
           (arg-name symbol?) ; know what to replcae with in the body
@@ -270,11 +270,11 @@ So funded looks like this
 ; without argname, this is how you get variation in your function! (bc function is abstraction)
 ; the rest is essential.
 
-```
+```racket
 
 And an example would be
 
-```
+```racket
 ; EXAMPLE
 (fundef 'double
         'n
@@ -293,7 +293,7 @@ Remember that they are expressions (but function definitions are not). So someth
 
 would need to represented as part of our `ArithmeticExpression` define-type, but as a function call/application. this is denoted by:
 
-```
+```racket
 (define-type Expression
 	[numC ...]
 	[idC ...]
@@ -344,7 +344,7 @@ i.e. `subst( 3 x plusC ) -> (+ 3 x)`
 
 How should `appC` work? it should be like
 
-```
+```racket
 (interp (appC 'double (numC 8))
 			(list double-def))
 			16)
@@ -358,7 +358,7 @@ How should `appC` work? it should be like
 
 ## How does `subst` work?
 
-```
+```racket
 (define (subst [what: ExprC]
                [for: symbol]
                [in: Exprc])
@@ -369,7 +369,7 @@ How should `appC` work? it should be like
 
 For example:
 
-```
+```racket
 (test (subst (numC 8) 'x (idC 'x)))
 ; what are we replacing? (numC 8)
 ; for which symbol? ('x)

@@ -15,7 +15,7 @@ Before (interp y) used to be an error. Now, we should look it up if y is within 
 
 what about:
 
-```scheme
+```racket
 (interp {let {x 1}
           {let x 2}
           x})
@@ -25,7 +25,7 @@ which x do we replace it with? the closest one!
 
 instead of taking an expression, it needs an ENVIRONMENT.
 
-```
+```racket
 (interp): ExprC Env (listof FundDef) -> number
 ```
 
@@ -39,14 +39,15 @@ we need the following helpers:
 - lookup: symbol env -> number
 	- take symbol, env, and returns a number.
 
-```scheme
+```racket
 (extend-env (bind 'x 1)
             (mt-env))
 ```
 
 for every single call, we have to do something like
 
-```(extend-env (bind 'y 2)
+```racket
+(extend-env (bind 'y 2)
 (extend-env (bind 'x 1)
 mt-env))))
 ```
